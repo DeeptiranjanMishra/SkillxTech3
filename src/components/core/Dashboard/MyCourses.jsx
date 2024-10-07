@@ -3,7 +3,7 @@ import { VscAdd } from "react-icons/vsc"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
-import { fetchInstructorCourses } from "../../../services/operations/courseDetailsAPI"
+import { fetchInstructorCourses,fetchCourseDetails } from "../../../services/operations/courseDetailsAPI"
 import IconBtn from "../../common/IconBtn"
 import CoursesTable from "./InstructorCourses/CoursesTable"
 
@@ -14,7 +14,10 @@ export default function MyCourses() {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const result = await fetchInstructorCourses(token)
+      const result = await fetchInstructorCourses(token);
+      //const res = await fetchCourseDetails(result.data.data._id);
+      console.log("logging:",result);
+
       if (result) {
         setCourses(result)
       }

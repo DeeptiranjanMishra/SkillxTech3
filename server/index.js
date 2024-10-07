@@ -8,7 +8,7 @@ const courseRoutes = require("./routes/Course");
 const contactUsRoute = require("./routes/Contact");
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
-
+const cors = require("cors");
 const {cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
@@ -21,6 +21,8 @@ database.connect();
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(cors());
 
 app.use(
 	fileUpload({
