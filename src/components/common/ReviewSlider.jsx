@@ -19,27 +19,40 @@ import { ratingsEndpoints } from "../../services/apis"
 
 function ReviewSlider() {
   const [reviews, setReviews] = useState([])
+  const [loading, setLoading] = useState(true) // Loading state
   const truncateWords = 15
 
   useEffect(() => {
     ;(async () => {
-      const { data } = await apiConnector(
-        "GET",
-        ratingsEndpoints.REVIEWS_DETAILS_API
-      )
-      if (data?.success) {
-        setReviews(data?.data)
+      try {
+        const { data } = await apiConnector(
+          "GET",
+          ratingsEndpoints.REVIEWS_DETAILS_API
+        )
+        if (data?.success) {
+          setReviews(data?.data)
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error)
+      } finally {
+        setLoading(false) // Stop loading after data is fetched
       }
     })()
   }, [])
 
-  // console.log(reviews)
+  if (loading) {
+    return <div>Loading...</div> // Show loading while data is being fetched
+  }
+
+  if (reviews.length === 0) {
+    return <div>No reviews available</div> // Show if no reviews are fetched
+  }
 
   return (
     <div className="text-white">
-      <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
+      <div className="my-[50px] h-[300px] max-w-maxContentTab lg:max-w-maxContent w-full">
         <Swiper
-          slidesPerView={4}
+          slidesPerView={3} // Default for smaller screens
           spaceBetween={25}
           loop={true}
           freeMode={true}
@@ -47,8 +60,18 @@ function ReviewSlider() {
             delay: 2500,
             disableOnInteraction: false,
           }}
+          breakpoints={{
+            // when window width is >= 640px
+            640: {
+              slidesPerView: 3,
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
           modules={[FreeMode, Pagination, Autoplay]}
-          className="w-full "
+          className="w-full h-full"
         >
           {reviews.map((review, i) => {
             return (
@@ -61,7 +84,7 @@ function ReviewSlider() {
                           ? review?.user?.image
                           : `https://api.dicebear.com/5.x/initials/svg?seed=${review?.user?.firstName} ${review?.user?.lastName}`
                       }
-                      alt=""
+                      alt="user"
                       className="h-9 w-9 rounded-full object-cover"
                     />
                     <div className="flex flex-col">
@@ -97,7 +120,6 @@ function ReviewSlider() {
               </SwiperSlide>
             )
           })}
-          {/* <SwiperSlide>Slide 1</SwiperSlide> */}
         </Swiper>
       </div>
     </div>
