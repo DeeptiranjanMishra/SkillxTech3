@@ -172,7 +172,7 @@ const Footer = () => {
             })}
           </div>
 
-          <div className="text-center">Made with ❤️ Deeptiranjan Mishra © 2023 SkillxTech </div>
+          <div className="text-center">Made with ❤️ Deeptiranjan Mishra © 2024 SkillxTech </div>
         </div>
       </div>
     </div>
